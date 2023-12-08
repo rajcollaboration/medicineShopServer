@@ -10,6 +10,15 @@ const medicineScheema = mongoose.Schema({
         default: 0,
         required: true
     },
+    buyingPrice:{
+        type: Number,
+        default: 0 ,
+        required: true
+    },
+    discount:{
+        type: Number,
+        default: 0,
+    },
     expDate: {
         type: String,
         default: 0,
@@ -41,7 +50,7 @@ const medicineScheema = mongoose.Schema({
         type: String,
     },
     category: {
-        type: String,
+        type: Array,
     },
     adminId:{
         type: mongoose.Schema.Types.ObjectId, ref: 'Admin', required: true
