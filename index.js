@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import adminAuth from './routes/auth.js';
 import stuffAuth from './routes/staffAuthRoute.js';
 import medicine from './routes/medicine.js';
+import suplier from './routes/suplier.js';
 
 
 const app = express();
@@ -29,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/admin/api/auth',adminAuth);
 app.use('/admin/api/stuff', stuffAuth);
 app.use('/admin/api/medicine', medicine);
-
+app.use('/admin/api/suplier', suplier);
 
 // error Handlers
 

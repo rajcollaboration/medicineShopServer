@@ -53,7 +53,10 @@ const medicineScheema = mongoose.Schema({
         type: Array,
     },
     adminId:{
-        type: mongoose.Schema.Types.ObjectId, ref: 'Admin', required: true
+        type: mongoose.Schema.Types.ObjectId, ref: 'Admin'
+    },
+    suplierId:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Suplier'
     }
 },{timestamps: true});
 

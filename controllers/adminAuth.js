@@ -26,17 +26,14 @@ export const createAdmin = async(req,res,next) => {
         }
         const isAvailable  = await createAdminSchema.findOne({'phone': adminData.phone});
         if (!isAvailable) {
-           
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(req.body.password, salt);
             const newAdmin = new createAdminSchema({...req.body, password: hash});
-    
             await newAdmin.save();
-            res.status(200).send({message: 'Admin Created Success',staus: 200, success: true}); 
+            res.status(200).send({message: 'Admin Created Success',staus: 201, success: true}); 
         } else {
-           return next(createError(403,'Admin already exists'));
+           return next(createError(409,'Admin already exists'));
         }
-        
     } catch (error) {
         next(error)
     }
@@ -104,30 +101,22 @@ export const deleteAdmin = async(req, res, next) => {
 export const adminLogin = async (req, res, next) => {
     try {
         const { uId, password } = req.body;
-
         if (!uId || !password) {
             return res.status(400).json({ error: 'Please provide both uId and password' });
         }
-
         const user = await createAdminSchema.findOne({ $or: [{ 'phone': uId }, { 'email': uId }] });
-
         if (!user) {
             return next(createError(404, 'User not found. Please contact the support team.'));
         }
-
         const isCorrect = await bcrypt.compare(password, user.password);
-
         if (!isCorrect) {
             return next(createError(400, 'Invalid username or password'));
         }
-
         const token = jwt.sign({ id: user._id }, process.env.JWT);
         const { password: userPassword, ...others } = user._doc;
-
         res.status(200).json({ token, user: others });
     } catch (error) {
         console.log(error);
-        // Handle other types of errors (e.g., database errors) appropriately
         next(createError(500, 'Internal Server Error'));
     }
 }

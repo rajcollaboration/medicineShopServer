@@ -47,7 +47,7 @@ const createAdminScheema = mongoose.Schema({
     },
     employes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Stuff' }],
     medicines:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Medicine'}],
-    supplyers:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Supplyer'}]
+    supplyers:[{ type: mongoose.Schema.Types.ObjectId, ref: 'Suplier'}]
 }, {timestamps: true});
 
 export default mongoose.model("Admin",createAdminScheema);
