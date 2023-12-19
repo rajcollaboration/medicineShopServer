@@ -71,13 +71,46 @@ export const loginSuplier = async(req,res,next) =>{
 
 export const deleteSuplier = async(req,res,next)=>{
     try {
+        const {suplierId} = req.body;
+        if (!suplierId) {
+            return next(createError(422, 'Suplier Not Exist'));
+        }
+
+        const deletedSuplier = suplier.findOneAndDelete({'id': suplierId});
+        res.status(200).json({message: "Suplier deleted Success", sucess: true, deletedSuplier: deletedSuplier});
         
     } catch (error) {
-        
+        console.log(error);
+        next(createError(500, "Something went wrong when deleting"));
     }
 }
 
 export const editSupplier = async(req,res,next)=>{
+    try {
+        const {suplierId, ...others} = req.body;
+        const isExistSuplier = suplier.findOne({$and :{_id: suplierId } });
+        if (!isExistSuplier) {
+            return next(createError(409,"User Not Exists"));
+        }
+
+        suplier.findOneAndUpdate(
+            {_id: suplierId},
+            {$set: {others}},
+            {new: true}
+        ).then((updatedUser)=>{
+            console.log("User updated");
+            res.status(200).json({success: true, message: updatedUser, status: 'success'});
+        }).catch((error)=>{
+            console.log(error);
+            return next(createError(422, "Error updating user"));
+        });
+    } catch (error) {
+        console.log(error);
+        next(createError(500, "Internal server Error"));
+    }
+}
+
+const addSupplierMedicine = async(req, res, next) => {
     try {
         
     } catch (error) {
