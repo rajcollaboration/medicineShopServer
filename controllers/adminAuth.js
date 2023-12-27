@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 
 import createAdminSchema from '../models/createAdmin.js';
 import { createError } from '../error.js';
+import createStaff from '../models/createStaff.js';
 
 
 // create admin
@@ -118,6 +119,38 @@ export const adminLogin = async (req, res, next) => {
     } catch (error) {
         console.log(error);
         next(createError(500, 'Internal Server Error'));
+    }
+}
+
+// get All stuffs
+
+export const getAllStuffs = async (req,res,next)=>{
+    try {
+        const {adminId} = req.body;
+        if (!adminId) {
+            return next(createError(400, "Invalid Admin Id"));
+        }
+
+        const allStuffs = await createStaff.find({'admin': adminId});
+        res.status(200).json({success: true, data: allStuffs, message: "Stuff fatched by AdminId"});
+    } catch (error) {
+        next(createError(300, "Internal server error"));
+    }
+}
+
+// get single stuff
+
+export const getSingleStuffs = async (req,res,next)=>{
+    try {
+        const {adminId, stuffId} = req.body;
+        if (!adminId && !stuffId) {
+            return next(createError(400, "Invalid Admin Id or StuffId"));
+        }
+
+        const allStuffs = await createStaff.findOne({'admin': adminId, '_id': stuffId});
+        res.status(200).json({success: true, data: allStuffs, message: "Stuff fatched by AdminId and Stuff Id"});
+    } catch (error) {
+        next(createError(300, "Internal server error"));
     }
 }
 
